@@ -21,6 +21,8 @@ export default function TabLayout() {
         options={{
           title: 'Home',
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          // Sembunyikan tab bar di halaman Login agar fullscreen
+          tabBarStyle: { display: 'none' },
         }}
       />
       <Tabs.Screen
@@ -33,3 +35,4 @@ export default function TabLayout() {
     </Tabs>
   );
 }
+
