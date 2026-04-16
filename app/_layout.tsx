@@ -6,6 +6,7 @@ import * as SecureStore from "expo-secure-store";
 import { useEffect } from "react";
 import { ClerkProvider } from "@clerk/clerk-expo";
 import { StatusBar } from "expo-status-bar";
+import { Platform } from "react-native";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -50,7 +51,7 @@ export default function RootLayout() {
   if (!fontsLoaded && !fontError) return null;
 
   return (
-    <ClerkProvider publishableKey={publishableKey} tokenCache={tokenCache}>
+    <ClerkProvider publishableKey={publishableKey} tokenCache={Platform.OS !== 'web' ? tokenCache : undefined}>
       <Stack screenOptions={{ headerShown: false }} />
       <StatusBar style="auto" />
     </ClerkProvider>
