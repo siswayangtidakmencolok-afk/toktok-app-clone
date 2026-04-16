@@ -1,6 +1,9 @@
-import LoginScreen from '../(auth)/LoginScreen';
+import { View, Text } from 'react-native';
 
 export default function HomeScreen() {
-  return <LoginScreen />;
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text style={{ fontSize: 20 }}>Selamat Datang di TokTok!</Text>
+    </View>
+  );
 }
-
