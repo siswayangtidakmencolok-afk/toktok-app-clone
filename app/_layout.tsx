@@ -4,7 +4,8 @@ import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import * as SecureStore from "expo-secure-store";
 import { useEffect } from "react";
-import { ClerkProvider } from "@clerk/clerk-expo";
+import { ClerkProvider, SignedIn, SignedOut } from "@clerk/clerk-expo";
+import LoginScreen from "./(auth)/LoginScreen";
 import { StatusBar } from "expo-status-bar";
 import { Platform } from "react-native";
 
@@ -52,7 +53,12 @@ export default function RootLayout() {
 
   return (
     <ClerkProvider publishableKey={publishableKey} tokenCache={Platform.OS !== 'web' ? tokenCache : undefined}>
-      <Stack screenOptions={{ headerShown: false }} />
+      <SignedIn>
+        <Stack screenOptions={{ headerShown: false }} />
+      </SignedIn>
+      <SignedOut>
+        <LoginScreen />
+      </SignedOut>
       <StatusBar style="auto" />
     </ClerkProvider>
   );

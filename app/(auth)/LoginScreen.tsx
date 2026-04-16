@@ -1,37 +1,35 @@
 // LoginScreen.tsx
 import { VideoView, useVideoPlayer } from "expo-video";
 import Colors from "../utils/Color";
-import { Image, Text, TouchableOpacity, View } from "react-native";
+import { Image, Text, Pressable, View } from "react-native";
 import * as WebBrowser from "expo-web-browser";
 import { useCallback } from "react";
-import { useSSO } from "@clerk/clerk-expo";
+import { useWarmUpBrowser } from "../../hooks/useWarmUpBrowser";
+import { useOAuth } from "@clerk/clerk-expo";
 import * as Linking from "expo-linking";
 // Diperlukan agar OAuth callback bekerja dengan baik
 WebBrowser.maybeCompleteAuthSession();
 export default function LoginScreen() {
   
-  // Hook SSO dari Clerk per standar 2026
-  const { startSSOFlow } = useSSO();
+// Panaskan browser sebelum OAuth dibuka
+  useWarmUpBrowser();
+  // Hook OAuth dari Clerk untuk Google
+  const { startOAuthFlow } = useOAuth({ strategy: "oauth_google" });
   
   const onPress = useCallback(async () => {
     try {
-      console.log("Login button pressed!");
-      // Jalankan alur login Google
-      const result = await startSSOFlow({ 
-        strategy: "oauth_google",
-        redirectUrl: Linking.createURL('/') 
-      });
-
-      console.log("SSO Result:", result);
-
-      if (result.createdSessionId) {
+  // Fungsi yang dipanggil saat tombol Google ditekan
+  const { createdSessionId, signIn, signUp, setActive} =
+  await startOAuthFlow({ redirectUrl: Linking.createURL('/') });
+      if (createdSessionId) {
         // Login berhasil → aktifkan session
-        result.setActive!({ session: result.createdSessionId });
-      }
+        setActive!({ session: createdSessionId });
+      } else {}
+       //use signIn or signUp for next steps such as MFA
     } catch (error) {
-      console.error("SSO error:", error);
+      console.error("OAuth error:", error);
     }
-  }, [startSSOFlow]);
+  },[]);
   const player = useVideoPlayer(
     require('../../assets/images/fireworks.mp4'),
     (player) => {
@@ -78,9 +76,8 @@ export default function LoginScreen() {
           Ultimate Place to Share your Short Videos with Great Community
         </Text>
         {/* Tombol Sign in with Google */}
-        <TouchableOpacity
+        <Pressable
           onPress={onPress}
-          activeOpacity={0.8}
           style={{
             flexDirection: 'row',
             alignItems: 'center',
@@ -91,7 +88,6 @@ export default function LoginScreen() {
             borderRadius: 99,
             position: 'absolute',
             bottom: 150,
-            zIndex: 100, // Memastikan tombol di paling atas
           }}
         >
           <Image
@@ -105,7 +101,7 @@ export default function LoginScreen() {
           }}>
             Sign in with Google
           </Text>
-        </TouchableOpacity>
+        </Pressable>
       </View>
     </View>
   );

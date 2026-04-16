@@ -4,7 +4,8 @@ import { useFonts } from "expo-font";
 import { useCallback } from "react";
 import * as SplashScreen from "expo-splash-screen";
 import LoginScreen from "./Apps/Screens/LoginScreen/LoginScreen";
-import { ClerkProvider } from "@clerk/clerk-expo";
+import { ClerkProvider, SignedIn, SignedOut } from "@clerk/clerk-expo";
+import HomeScreen from "./app/(auth)/Home/HomeScreen";
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();
@@ -27,9 +28,9 @@ export default function App() {
   }
   return (
     <ClerkProvider publishableKey={process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY}>
-    <View style={styles.container}>
+    <View style={styles.container} onLayout={onLayoutRootView}>
     <SignedIn>
-      <Text>You are Signed In</Text>
+        <HomeScreen/>
       </SignedIn>
       <SignedOut>
       <LoginScreen/>
