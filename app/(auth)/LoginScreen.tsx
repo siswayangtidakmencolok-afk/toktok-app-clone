@@ -1,25 +1,50 @@
 // LoginScreen.tsx
-import { ResizeMode, Video } from "expo-av";
+import { VideoView, useVideoPlayer } from "expo-video";
 import Colors from "../utils/Color";
 import { Image, Text, Pressable, View } from "react-native";
+import * as WebBrowser from "expo-web-browser";
+import { useWarmUpBrowser } from "../hooks/useWarmUpBrowser";
 
+// Diperlukan agar OAuth callback bekerja dengan baik
+WebBrowser.maybeCompleteAuthSession();
 export default function LoginScreen() {
+// Panaskan browser sebelum OAuth dibuka
+  const {warmUpBrowser} = useWarmUpBrowser();
 
-  const handleGoogleSignIn = () => {
-    console.log('Tombol Google Sign In ditekan');
-    // TODO: tambahkan logika autentikasi Google di sini
+  // Hook OAuth dari Clerk untuk Google
+  const { startOAuthFlow } = useOAuth({ strategy: "oauth_google" });
+
+  // Fungsi yang dipanggil saat tombol Google ditekan
+  const handleGoogleSignIn = async () => {
+    try {
+      const { createdSessionId, setActive } = await startOAuthFlow();
+
+      if (createdSessionId) {
+        // Login berhasil → aktifkan session
+        setActive!({ session: createdSessionId });
+      }
+    } catch (error) {
+      console.error("OAuth error:", error);
+    }
   };
+
+  const player = useVideoPlayer(
+    require('../../assets/images/fireworks.mp4'),
+    (player) => {
+      player.loop = true;  // video berulang
+      player.play();       // langsung putar
+    }
+  );
 
   return (
     <View style={{ flex: 1 }}>
 
       {/* LAYER 1: Video latar belakang */}
-      <Video
-        source={require("../../assets/images/fireworks.mp4")}
+      <VideoView
+        player={player}
         style={{ width: "100%", height: "100%" }}
-        resizeMode={ResizeMode.COVER}
-        shouldPlay
-        isLooping
+        contentFit="cover"
+        nativeControls={false}
       />
 
       {/* LAYER 2: Semua konten menumpuk di atas video */}
@@ -55,33 +80,32 @@ export default function LoginScreen() {
         </Text>
 
         {/* Tombol Sign in with Google */}
-        // Ganti TouchableOpacity → Pressable (lebih reliable di web & mobile)
-<Pressable
-  onPress={() => console.log('Google Sign In ditekan')}
-  style={{
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-    backgroundColor: Colors.WHITE,
-    padding: 10,
-    paddingHorizontal: 40,
-    borderRadius: 99,
-    position: 'absolute',
-    bottom: 150,
-  }}
->
-  <Image
-    source={require('../../assets/images/google.png')}
-    style={{ width: 20, height: 20 }}
-  />
-  <Text style={{
-    fontFamily: 'Outfit-Medium',
-    fontSize: 16,
-    color: '#000000',
-  }}>
-    Sign in with Google
-  </Text>
-</Pressable>
+        <Pressable
+          onPress={() => console.log('Google Sign In ditekan')}
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: 10,
+            backgroundColor: Colors.WHITE,
+            padding: 10,
+            paddingHorizontal: 40,
+            borderRadius: 99,
+            position: 'absolute',
+            bottom: 150,
+          }}
+        >
+          <Image
+            source={require('../../assets/images/google.png')}
+            style={{ width: 20, height: 20 }}
+          />
+          <Text style={{
+            fontFamily: 'Outfit-Medium',
+            fontSize: 16,
+            color: '#000000',
+          }}>
+            Sign in with Google
+          </Text>
+        </Pressable>
 
       </View>
 

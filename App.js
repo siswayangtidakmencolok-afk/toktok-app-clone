@@ -28,7 +28,12 @@ export default function App() {
   return (
     <ClerkProvider publishableKey={process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY}>
     <View style={styles.container}>
+    <SignedIn>
+      <Text>You are Signed In</Text>
+      </SignedIn>
+      <SignedOut>
       <LoginScreen/>
+      </SignedOut>
     </View>
     </ClerkProvider>
   );
