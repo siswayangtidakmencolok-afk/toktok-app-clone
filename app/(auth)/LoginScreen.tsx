@@ -3,30 +3,36 @@ import { VideoView, useVideoPlayer } from "expo-video";
 import Colors from "../utils/Color";
 import { Image, Text, Pressable, View } from "react-native";
 import * as WebBrowser from "expo-web-browser";
-import { useWarmUpBrowser } from "../hooks/useWarmUpBrowser";
+import { useCallback } from "react";
+import { useWarmUpBrowser } from "../../hooks/useWarmUpBrowser";
+import { useOAuth } from "@clerk/clerk-expo";
 
 // Diperlukan agar OAuth callback bekerja dengan baik
 WebBrowser.maybeCompleteAuthSession();
 export default function LoginScreen() {
+  
 // Panaskan browser sebelum OAuth dibuka
-  const {warmUpBrowser} = useWarmUpBrowser();
+  useWarmUpBrowser();
 
   // Hook OAuth dari Clerk untuk Google
   const { startOAuthFlow } = useOAuth({ strategy: "oauth_google" });
-
-  // Fungsi yang dipanggil saat tombol Google ditekan
-  const handleGoogleSignIn = async () => {
+  
+  const onPress = useCallback(async () => {
     try {
-      const { createdSessionId, setActive } = await startOAuthFlow();
+  // Fungsi yang dipanggil saat tombol Google ditekan
+  const { createdSessionId, signIn, signUp, setActive} =
+  await startOAuthFlow();
 
       if (createdSessionId) {
         // Login berhasil → aktifkan session
         setActive!({ session: createdSessionId });
-      }
+
+      } else {}
+       //use signIn or signUp for next steps such as MFA
     } catch (error) {
       console.error("OAuth error:", error);
     }
-  };
+  },[]);
 
   const player = useVideoPlayer(
     require('../../assets/images/fireworks.mp4'),
@@ -81,7 +87,7 @@ export default function LoginScreen() {
 
         {/* Tombol Sign in with Google */}
         <Pressable
-          onPress={() => console.log('Google Sign In ditekan')}
+          onPress={onPress}
           style={{
             flexDirection: 'row',
             alignItems: 'center',
