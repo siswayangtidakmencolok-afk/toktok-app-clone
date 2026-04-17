@@ -7,6 +7,7 @@ import { useCallback } from "react";
 import { useWarmUpBrowser } from "../../hooks/useWarmUpBrowser";
 import { useOAuth } from "@clerk/clerk-expo";
 import * as Linking from "expo-linking";
+import {supabase} from "../utils/SupabaseConfig"
 // Diperlukan agar OAuth callback bekerja dengan baik
 WebBrowser.maybeCompleteAuthSession();
 export default function LoginScreen() {
@@ -24,6 +25,19 @@ export default function LoginScreen() {
       if (createdSessionId) {
         // Login berhasil → aktifkan session
         setActive!({ session: createdSessionId });
+        if(signUp?.emailAddress)
+        {
+
+          const { data, error } = await supabase
+          .from('Users')
+          .insert([
+          { name: signUp?.firstName,
+            email: signUp?.emailAddress,
+            username: signUp?.emailAddress.split('@')[0]
+          },
+          ])
+          .select()
+        }
       } else {}
        //use signIn or signUp for next steps such as MFA
     } catch (error) {
