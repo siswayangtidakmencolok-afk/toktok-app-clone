@@ -8,6 +8,7 @@ import { Image, Pressable, Text, View } from "react-native";
 import { useWarmUpBrowser } from "../../hooks/useWarmUpBrowser";
 import Colors from "../../utils/Color";
 import { supabase } from "../../utils/SupabaseConfig";
+
 // Diperlukan agar OAuth callback bekerja dengan baik
 WebBrowser.maybeCompleteAuthSession();
 export default function LoginScreen() {
@@ -48,7 +49,7 @@ export default function LoginScreen() {
   }
 }, []);
   const player = useVideoPlayer(
-    require('../../assets/images/fireworks.mp4'),
+    require('../../../assets/images/fireworks.mp4'),
     (player) => {
       player.loop = true;  // video berulang
       player.play();       // langsung putar
@@ -108,7 +109,7 @@ export default function LoginScreen() {
           }}
         >
           <Image
-            source={require('../../assets/images/google.png')}
+            source={require('../../../assets/images/google.png')}
             style={{ width: 20, height: 20 }}
           />
           <Text style={{
