@@ -5,7 +5,7 @@ import { VideoView, useVideoPlayer } from "expo-video";
 import * as WebBrowser from "expo-web-browser";
 import { useCallback } from "react";
 import { Image, Pressable, Text, View } from "react-native";
-import { useWarmUpBrowser } from "../../hooks/useWarmUpBrowser
+import { useWarmUpBrowser } from "../../hooks/useWarmUpBrowser";
 import Colors from "../../utils/Color";
 import { supabase } from "../../utils/SupabaseConfig";
 // Diperlukan agar OAuth callback bekerja dengan baik
