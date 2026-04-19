@@ -1,13 +1,13 @@
 // LoginScreen.tsx
-import { VideoView, useVideoPlayer } from "expo-video";
-import Colors from "../utils/Color";
-import { Image, Text, Pressable, View } from "react-native";
-import * as WebBrowser from "expo-web-browser";
-import { useCallback } from "react";
-import { useWarmUpBrowser } from "../../hooks/useWarmUpBrowser";
 import { useOAuth } from "@clerk/clerk-expo";
 import * as Linking from "expo-linking";
-import {supabase} from "../utils/SupabaseConfig"
+import { VideoView, useVideoPlayer } from "expo-video";
+import * as WebBrowser from "expo-web-browser";
+import { useCallback } from "react";
+import { Image, Pressable, Text, View } from "react-native";
+import { useWarmUpBrowser } from "../../hooks/useWarmUpBrowser
+import Colors from "../../utils/Color";
+import { supabase } from "../../utils/SupabaseConfig";
 // Diperlukan agar OAuth callback bekerja dengan baik
 WebBrowser.maybeCompleteAuthSession();
 export default function LoginScreen() {
@@ -18,32 +18,35 @@ export default function LoginScreen() {
   const { startOAuthFlow } = useOAuth({ strategy: "oauth_google" });
   
   const onPress = useCallback(async () => {
-    try {
-  // Fungsi yang dipanggil saat tombol Google ditekan
-  const { createdSessionId, signIn, signUp, setActive} =
-  await startOAuthFlow({ redirectUrl: Linking.createURL('/') });
-      if (createdSessionId) {
-        // Login berhasil → aktifkan session
-        setActive!({ session: createdSessionId });
-        if(signUp?.emailAddress)
-        {
+  try {
+    const { createdSessionId, setActive, signIn, signUp } =
+      await startOAuthFlow({ redirectUrl: Linking.createURL('/') });
 
-          const { data, error } = await supabase
+    if (createdSessionId) {
+      await setActive!({ session: createdSessionId });
+
+      // Hanya insert ke Supabase kalau user BARU (signUp, bukan signIn)
+      if (signUp?.emailAddress) {
+        const { error } = await supabase
           .from('Users')
-          .insert([
-          { name: signUp?.firstName,
+          .insert([{
+            name: signUp?.firstName,
             email: signUp?.emailAddress,
-            username: signUp?.emailAddress.split('@')[0]
-          },
-          ])
-          .select()
-        }
-      } else {}
-       //use signIn or signUp for next steps such as MFA
-    } catch (error) {
-      console.error("OAuth error:", error);
+            username: signUp?.emailAddress?.split('@')[0],
+          }]);
+
+        if (error) console.error('Supabase insert error:', error.message);
+      }
     }
-  },[]);
+  } catch (error: any) {
+    // Kalau sudah login, abaikan error ini
+    if (error?.message?.includes('already signed in')) {
+      console.log('User sudah login, redirect ke tabs...');
+      return;
+    }
+    console.error('OAuth error:', error);
+  }
+}, []);
   const player = useVideoPlayer(
     require('../../assets/images/fireworks.mp4'),
     (player) => {
@@ -87,7 +90,7 @@ export default function LoginScreen() {
           marginTop: 10,
           textAlign: 'center',
         }}>
-          Ultimate Place to Share your Short Videos with Great Community
+          Silahkan menikmati video pendek dan temukan kebahagian di dalamnya!
         </Text>
         {/* Tombol Sign in with Google */}
         <Pressable
