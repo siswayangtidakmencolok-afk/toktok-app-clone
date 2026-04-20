@@ -47,7 +47,7 @@ function InitialLayout() {
       router.replace('/(tabs)');
     } else if (!isSignedIn && !inAuthGroup) {
       // Jika user BELUM LOGIN tapi mencoba masuk ke dalam aplikasi, pindahkan ke Login
-      router.replace('../(auth)/LoginScreen/LoginScreen');
+      router.replace('/(auth)/LoginScreen/LoginScreen');
     }
   }, [isSignedIn, isLoaded, segments]);
 

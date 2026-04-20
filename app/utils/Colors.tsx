@@ -3,7 +3,8 @@
 
 const Colors = {
   BACKGROUND_TRANSP: '#0000005f',  // Hitam transparan untuk overlay
-  WHITE: '#ffffff',                 // Putih murni
+  WHITE: '#ffffff',            
+  BLACK: '#000000',     // Putih murni
 };
 
 export default Colors;

@@ -1,6 +1,8 @@
 // app/(tabs)/_layout.tsx
+import AntDesign from '@expo/vector-icons/AntDesign';
+import Feather from '@expo/vector-icons/Feather';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { Tabs } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
 
 export default function TabLayout() {
   return (
@@ -9,17 +11,35 @@ export default function TabLayout() {
         name="index"
         options={{
           title: 'Home',
-          tabBarIcon: ({ color }) => (
-            <Ionicons name="home" size={24} color={color} />
+          tabBarIcon: ({ size, color }) => (
+            <AntDesign name="home" size={size} color={color} />
           ),
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="search"
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => (
-            <Ionicons name="search" size={24} color={color} />
+          title: 'Search',
+          tabBarIcon: ({ size, color }) => (
+            <Feather name="search" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="Add"
+        options={{
+          title: 'Add',
+          tabBarIcon: ({ size, color }) => (
+            <Ionicons name="add-outline" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="Profile"
+        options={{
+          title: 'Profile',
+          tabBarIcon: ({ size, color }) => (
+            <AntDesign name="user" size={size} color={color} />
           ),
         }}
       />

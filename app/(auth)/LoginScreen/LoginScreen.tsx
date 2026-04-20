@@ -6,7 +6,7 @@ import * as WebBrowser from "expo-web-browser";
 import { useCallback } from "react";
 import { Image, Pressable, Text, View } from "react-native";
 import { useWarmUpBrowser } from "../../hooks/useWarmUpBrowser";
-import Colors from "../../utils/Color";
+import Colors from "../../utils/Colors";
 import { supabase } from "../../utils/SupabaseConfig";
 
 // Diperlukan agar OAuth callback bekerja dengan baik
@@ -49,7 +49,7 @@ export default function LoginScreen() {
   }
 }, []);
   const player = useVideoPlayer(
-    require('../../../assets/images/fireworks.mp4'),
+    require('../../../assets/images/sportcars.mp4'),
     (player) => {
       player.loop = true;  // video berulang
       player.play();       // langsung putar
