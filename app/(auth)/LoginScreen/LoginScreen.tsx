@@ -19,35 +19,36 @@ export default function LoginScreen() {
   const { startOAuthFlow } = useOAuth({ strategy: "oauth_google" });
   
   const onPress = useCallback(async () => {
-  try {
-    const { createdSessionId, setActive, signIn, signUp } =
-      await startOAuthFlow({ redirectUrl: Linking.createURL('/') });
+    try {
+      const { createdSessionId, setActive, signUp } =
+        await startOAuthFlow({ redirectUrl: Linking.createURL('/') });
 
-    if (createdSessionId) {
-      await setActive!({ session: createdSessionId });
+      if (createdSessionId && setActive) {
+        await setActive({ session: createdSessionId });
 
-      // Hanya insert ke Supabase kalau user BARU (signUp, bukan signIn)
-      if (signUp?.emailAddress) {
-        const { error } = await supabase
-          .from('Users')
-          .insert([{
-            name: signUp?.firstName,
-            email: signUp?.emailAddress,
-            username: signUp?.emailAddress?.split('@')[0],
-          }]);
+        // Hanya insert ke Supabase kalau user BARU (signUp, bukan signIn)
+        if (signUp?.emailAddress) {
+          const { error } = await supabase
+            .from('Users')
+            .insert([{
+              name: signUp.firstName,
+              email: signUp.emailAddress,
+              username: signUp.emailAddress.split('@')[0],
+            }]);
 
-        if (error) console.error('Supabase insert error:', error.message);
+          if (error) console.error('Supabase insert error:', error.message);
+        }
       }
+    } catch (err) {
+      const error = err as Error;
+      // Kalau sudah login, abaikan error ini
+      if (error.message?.includes('already signed in')) {
+        console.log('User sudah login, redirect ke tabs...');
+        return;
+      }
+      console.error('OAuth error:', error);
     }
-  } catch (error: any) {
-    // Kalau sudah login, abaikan error ini
-    if (error?.message?.includes('already signed in')) {
-      console.log('User sudah login, redirect ke tabs...');
-      return;
-    }
-    console.error('OAuth error:', error);
-  }
-}, []);
+  }, [startOAuthFlow]);
   const player = useVideoPlayer(
     require('../../../assets/images/sportcars.mp4'),
     (player) => {

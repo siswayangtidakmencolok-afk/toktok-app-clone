@@ -1,10 +1,10 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import HomeScreen from '../(auth)/Home/HomeScreen'
-import SearchScreen from '../(auth)/Search/SearchScreen'
-import AddScreen from '../(auth)/Add/AddScreen'
-import ProfileScreen from '../(auth)/LoginScreen/LoginScreen'
+import HomeScreen from '../(tabs)/index'
+import SearchScreen from '../(tabs)/explore'
+import AddScreen from '../(tabs)/add'
+import ProfileScreen from '../(tabs)/profile'
 import { Colors } from '@/constants/theme'
 
 const Tab=createBottomTabNavigator();
@@ -14,7 +14,7 @@ export default function TabNavigation() {
       screenOptions={{
         tabBarActiveTintColor:Colors.BLACK,
         headerShown:false,
-        
+
       }}
       >
       <Tab.Screen name="Home" component={HomeScreen} />

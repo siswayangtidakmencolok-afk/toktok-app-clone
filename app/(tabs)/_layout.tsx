@@ -26,7 +26,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="Add"
+        name="add"
         options={{
           title: 'Add',
           tabBarIcon: ({ size, color }) => (
@@ -35,7 +35,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="Profile"
+        name="profile"
         options={{
           title: 'Profile',
           tabBarIcon: ({ size, color }) => (
