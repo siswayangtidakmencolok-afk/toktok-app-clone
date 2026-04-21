@@ -20,6 +20,10 @@ export default function LoginScreen() {
   
   const onPress = useCallback(async () => {
     try {
+<<<<<<< HEAD
+=======
+      // SAaya mengganti dengan library Linkking karena sempat ada masalah dengan startOAuthFlow yang tidak membuka browser di beberapa perangkat
+>>>>>>> 6a2aefcc9f21877d2c401e400026ac832aae0297
       const { createdSessionId, setActive, signUp } =
         await startOAuthFlow({ redirectUrl: Linking.createURL('/') });
 
