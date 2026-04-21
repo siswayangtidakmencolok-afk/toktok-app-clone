@@ -47,8 +47,8 @@ const styles = StyleSheet.create({
     flex: 1,                    // mengisi seluruh layar
     justifyContent: 'center',   // konten di tengah vertikal
     alignItems: 'center',       // konten di tengah horizontal
-    padding: 20,
-    backgroundColor: '#fff',
+    padding: 20,             // padding agar tidak mepet ke tepi layar
+    backgroundColor: '#fff',  // latar belakang putih
   },
   image: {
     width: 140,
