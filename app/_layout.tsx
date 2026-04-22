@@ -7,10 +7,6 @@ import { useCallback, useEffect } from "react";
 import { StyleSheet, View } from "react-native";
 import 'react-native-url-polyfill/auto'; // Polyfill untuk Supabase agar bisa berjalan di Mobile
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 6a2aefcc9f21877d2c401e400026ac832aae0297
 // Mencegah SplashScreen menutup sendiri sebelum kita suruh
 SplashScreen.preventAutoHideAsync();
 
@@ -51,11 +47,7 @@ function InitialLayout() {
       router.replace('/(tabs)');
     } else if (!isSignedIn && !inAuthGroup) {
       // Jika user BELUM LOGIN tapi mencoba masuk ke dalam aplikasi, pindahkan ke Login
-<<<<<<< HEAD
       router.replace('/(auth)/LoginScreen/LoginScreen');
-=======
-      router.replace('/(auth)/LoginScreen/LoginScreen'); // Pastikan nama folder auth sesuai dengan struktur Anda
->>>>>>> 6a2aefcc9f21877d2c401e400026ac832aae0297
     }
   }, [isSignedIn, isLoaded, segments]);
 
